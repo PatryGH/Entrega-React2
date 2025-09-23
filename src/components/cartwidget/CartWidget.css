@@ -1,0 +1,8 @@
+.cartcontainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.cartcontainer span {
+  color: #fff;
+}
