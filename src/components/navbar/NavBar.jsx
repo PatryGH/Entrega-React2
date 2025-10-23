@@ -1,10 +1,14 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import { products } from "../../assets/products";
 import CartWidget from "../cartwidget/CartWidget";
+import { useProducts } from "../../context/ProductsContext";
 import "./Navbar.css";
 
 function NavBar() {
+  const { products, loading } = useProducts();
+
+  if (loading) return null;
+
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
   return (

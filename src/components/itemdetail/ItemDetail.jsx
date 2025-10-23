@@ -1,13 +1,20 @@
 import React, { useState } from "react";
+import { useCart } from "../../context/CartContext";
 import "./ItemDetail.css";
+
 function ItemDetail({ product }) {
   const [qty, setQty] = useState(1);
+  const { addToCart } = useCart();
 
   const add = () => setQty((q) => q + 1);
   const sub = () => setQty((q) => Math.max(1, q - 1));
+
   const handleAddToCart = () => {
-    console.log(`Agregar ${qty} unidades de ${product.title} al carrito`);
-    alert(`Agregaste ${qty} unidades de ${product.title} (simulado)`);
+    // Creamos un nuevo objeto con la cantidad seleccionada
+    const productWithQty = { ...product, cantidad: qty };
+    addToCart(productWithQty);
+    alert(`
+Agregaste ${qty} unidades de ${product.title} al carrito 🛒`);
   };
 
   return (

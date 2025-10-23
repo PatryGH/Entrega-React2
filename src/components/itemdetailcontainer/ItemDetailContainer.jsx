@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../../assets/products";
 import ItemDetail from "../itemdetail/ItemDetail";
+import { useProducts } from "../../context/ProductsContext";
 
 function ItemDetailContainer() {
   const { id } = useParams();
+  const { products, loading } = useProducts();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    getProductById(id)
-      .then((p) => setProduct(p))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [id]); // importante: id en dependencias
+    if (!loading) {
+      const foundProduct = products.find((p) => p.id === id);
+      setProduct(foundProduct || null);
+    }
+  }, [id, products, loading]);
 
   if (loading) return <p>Cargando producto...</p>;
-  if (error) return <p>{error}</p>;
+  if (!product) return <p>Producto no encontrado </p>;
 
   return <ItemDetail product={product} />;
 }

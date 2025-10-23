@@ -1,27 +1,23 @@
-// src/components/itemlistcontainer/ItemListContainer.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ItemList from "../itemlist/ItemList";
-import { getProducts } from "../../assets/products";
+import { useProducts } from "../../context/ProductsContext";
 import "./ItemListContainer.css";
 
 function ItemListContainer() {
   const { categoryId } = useParams();
+  const { products, loading } = useProducts();
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    getProducts()
-      .then((all) => {
-        if (categoryId) {
-          setItems(all.filter((p) => p.category === categoryId));
-        } else {
-          setItems(all);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [categoryId]); // important: categoryId en dependencias
+    if (!loading) {
+      if (categoryId) {
+        setItems(products.filter((p) => p.category === categoryId));
+      } else {
+        setItems(products);
+      }
+    }
+  }, [categoryId, products, loading]);
 
   if (loading) return <p>Cargando productos...</p>;
   if (items.length === 0) return <p>No hay productos en esta categoría.</p>;
